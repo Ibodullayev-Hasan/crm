@@ -11,7 +11,7 @@ const customFormat = printf(({ level, message, timestamp, context }) => {
 const config = configuration()
 
 export const createWinstonLogger = () => {
-	const isDev = config.enviroment === 'dev';
+	const isDev = config.environment === 'dev';
 
 	return WinstonModule.createLogger({
 		level: isDev ? 'debug' : 'warn',
