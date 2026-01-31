@@ -4,5 +4,5 @@ export default () => ({
   db: {
     url: process.env.DATABASE_URI as string
   },
-  enviroment: process.env.NODE_ENV as string
+  environment: process.env.NODE_ENV as string
 });
