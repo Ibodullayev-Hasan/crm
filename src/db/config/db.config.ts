@@ -1,25 +1,15 @@
-import { ConfigService } from '@nestjs/config';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { registerAs } from '@nestjs/config';
+import * as path from 'path';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
-export const getDbConfig = (
-  configService: ConfigService,
-): TypeOrmModuleOptions => {
-  const isDev = configService.get<string>('enviroment') === 'dev';
 
-  return {
-    type: 'postgres',
-    url: configService.get<string>('db.url'),
-
-    entities: [
-      isDev ? 'src/**/*.entity.ts' : 'dist/**/*.entity.js',
-    ],
-
-    migrations: [
-      isDev
-        ? 'src/database/migrations/*.ts'
-        : 'dist/database/migrations/*.js',
-    ],
-
-    synchronize: isDev,
-  };
-};
+export default registerAs(`dbConfig`, (): PostgresConnectionOptions => ({
+  type: "postgres",
+  url: process.env.DATABASE_URI as string,
+  entities: [path.join(__dirname, '../../**/*.entity{.ts,.js}')],
+  migrations: [path.join(__dirname, 'migrations/**/*{.ts,.js}')],
+  migrationsRun: false,
+  migrationsTableName: "migrations",
+  synchronize: process.env.NODE_ENV === 'dev',
+  logging: process.env.NODE_ENV === 'dev'
+}))
