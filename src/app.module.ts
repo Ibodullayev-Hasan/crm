@@ -1,26 +1,31 @@
-// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { getDbConfig } from './db/config/db.config';
+
+import configuration from './config/configuration';
+import dbConfig from './db/config/db.config';
+
+import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'dev'}`,
-      load: [configuration],
+      load: [configuration, dbConfig],
     }),
 
     TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
-        getDbConfig(configService),
+        configService.get<PostgresConnectionOptions>('dbConfig'),
     }),
 
-    
-
+    UsersModule,
+    AuthModule,
   ],
 })
-export class AppModule { }
+export class AppModule { };
