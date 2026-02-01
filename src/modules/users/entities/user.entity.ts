@@ -37,7 +37,6 @@ export class User implements IUser {
 
 	@Column({ type: "text", nullable: true, select: false })
 	password?: string
-	// select: false → default query’da chiqmaydi (security 🔐)
 
 	@Column({
 		type: "enum",
