@@ -8,6 +8,8 @@ import dbConfig from './db/config/db.config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { APP_FILTER } from '@nestjs/core';
+import { AllexceptionFilter } from './common/filters';
 
 @Module({
   imports: [
@@ -27,5 +29,11 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
     UsersModule,
     AuthModule,
   ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllexceptionFilter
+    }
+  ]
 })
 export class AppModule { };
