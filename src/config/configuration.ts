@@ -15,5 +15,11 @@ export default () => ({
   cors: {
     urlDev: process.env.CLIENT_URL_DEV as string || `http://127.0.0.1:4000`,
     urlPro: process.env.CLIENT_URL_PRO as string || `http://127.0.0.1:4000`
+  },
+  jwt: {
+    secretKey: process.env.SECRET_KEY as string,
+    aesKey: process.env.AES_KEY as string,
+    accessExpiresTime: process.env.ACCESS_EXPIRES_TIME || '10m',
+    refreshExpiresTime: process.env.REFRESH_EXPIRES_TIME || '7d',
   }
 });
